@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Rex Game</title>
+    <style>
+        #game-container {
+            width: 600px;
+            height: 200px;
+            border: 1px solid black;
+            position: relative;
+        }
+        #trex {
+            width: 50px;
+            height: 50px;
+            background-image: url('trex.png');
+            background-size: contain;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="trex"></div>
+    </div>
+    <script>
+        const trex = document.getElementById('trex');
+        let isJumping = false;
+        let gravity = 0.9;
+        let jumpCount = 0;
+
+        function jump() {
+            if (!isJumping) {
+                isJumping = true;
+                let jumpInterval = setInterval(() => {
+                    let trexBottom = parseInt(getComputedStyle(trex).bottom);
+                    if (trexBottom >= 200) {
+                        clearInterval(jumpInterval);
+                        let fallInterval = setInterval(() => {
+                            if (trexBottom <= 0) {
+                                clearInterval(fallInterval);
+                                isJumping = false;
+                                jumpCount = 0;
+                            } else {
+                                trex.style.bottom = (trexBottom - gravity) + 'px';
+                                trexBottom = parseInt(getComputedStyle(trex).bottom);
+                            }
+                        }, 20);
+                    } else {
+                        trex.style.bottom = (trexBottom + gravity * 2) + 'px';
+                    }
+                }, 20);
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                jump();
+            }
+        });
+    </script>
+</body>
+</html>
 
